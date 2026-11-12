@@ -240,7 +240,7 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
 .hdr { font-size: 24px; font-weight: 900; margin-top: 6px; }
 
 /* Start page: icon on top, credits pinned to the bottom, menu centred between them */
-.overlay.start { justify-content: flex-start; gap: 8px; }
+.overlay.start { justify-content: flex-start; gap: 7px; }
 .overlay > * { flex-shrink: 0; }   /* scroll rather than squash buttons on short screens */
 .start-icon {
     margin-top: auto;
@@ -253,9 +253,9 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
     margin-top: auto;
     padding-top: 10px;
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
-    line-height: 1.5;
+    line-height: 1.4;
 }
 .credits a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 

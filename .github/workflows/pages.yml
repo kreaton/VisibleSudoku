@@ -25,7 +25,8 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Publish
-        run: dotnet publish VisibleSudoku.csproj -c Release -o out -p:Version=1.0.${{ github.run_number }}
+        # The run number becomes the patch version (1.0.<run>), see Directory.Build.props
+        run: dotnet publish VisibleSudoku.csproj -c Release -o out -p:BuildNumber=${{ github.run_number }}
 
       - name: Prepare for GitHub Pages
         run: |
