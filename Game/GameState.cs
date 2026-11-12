@@ -8,7 +8,6 @@ public class GameState
     public int[] Givens { get; set; } = new int[81];
     public int[] Solution { get; set; } = new int[81];
     public int[] Values { get; set; } = new int[81];
-    public int[] Notes { get; set; } = new int[81]; // bitmask, bit n = note for digit n
     public int Seconds { get; set; }
     public int Mistakes { get; set; }
     public int Hints { get; set; }

@@ -7,7 +7,6 @@
     --given-bg: #e4e4e4;
     --given-fg: #000000;
     --entry-fg: #0000d0;
-    --note-fg: #000000;
     --peer-bg: #cfe0ff;
     --same-bg: #ffc766;
     --sel-bg: #ffe600;
@@ -28,7 +27,6 @@
     --given-bg: #2e2e2e;
     --given-fg: #ffffff;
     --entry-fg: #ffe600;
-    --note-fg: #ffffff;
     --peer-bg: #0c2f66;
     --same-bg: #7a4a00;
     --sel-bg: #4dd2ff;
@@ -159,18 +157,6 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
     pointer-events: none;
 }
 
-.notes {
-    width: 100%; height: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    font-size: 3.5cqw;
-    font-weight: 900;
-    color: var(--note-fg);
-    padding: 1px;
-}
-.cell.sel .notes { color: var(--sel-fg); }
-.notes span { display: flex; align-items: center; justify-content: center; }
 
 .msg {
     flex: 0 0 auto;
@@ -216,19 +202,14 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
 .btn.erase { background: #c40000; color: #fff; }
 .btn.undo { background: #1b7a2b; color: #fff; }
 .btn.new { background: #00727a; color: #fff; }
-.act.notes-btn { background: #0b4fc4; color: #fff; }
 .act.hint { background: #a84300; color: #fff; }
 .act.check { background: #6a1b9a; color: #fff; }
-.act.notes-btn.on {       /* "on" shown by colour AND a thick inner ring */
-    background: var(--btn-on-bg); color: var(--btn-on-fg);
-    box-shadow: inset 0 0 0 4px var(--btn-on-fg);
-}
 
 .actions {
     width: 100%;
     flex: 0 0 auto;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 6px;
 }
 .act {

@@ -29,15 +29,6 @@
                         {
                             @game.Values[idx]
                         }
-                        else if (game.Notes[idx] != 0)
-                        {
-                            <div class="notes">
-                                @for (int n = 1; n <= 9; n++)
-                                {
-                                    <span>@((game.Notes[idx] >> n & 1) != 0 ? n.ToString() : "")</span>
-                                }
-                            </div>
-                        }
                     </button>
                 }
             </div>
@@ -64,10 +55,6 @@
             </button>
             <button type="button" class="btn act new" @onclick="OpenMenu" aria-label="New game" title="New game">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg>
-            </button>
-            <button type="button" class="btn act notes-btn @(notes ? "on" : "")" @onclick="ToggleNotes" aria-pressed="@(notes ? "true" : "false")"
-                    aria-label="@(notes ? "Notes on" : "Notes off")" title="Notes">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3l4 4L8 20H4v-4z"/><path d="M14 6l4 4"/></svg>
             </button>
             <button type="button" class="btn act hint" @onclick="Hint" aria-label="Hint" title="Hint">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>

@@ -15,11 +15,11 @@ public partial class Home : IDisposable
     GameState? game;
     GameState? saved;
     int selected = -1;
-    bool notes, dark, menuOpen = true, busy;
+    bool dark, menuOpen = true, busy;
     string message = "";
     readonly HashSet<int> flagged = new();
     readonly bool[] conflicts = new bool[81];
-    readonly List<(int[] Values, int[] Notes)> undo = new();
+    readonly List<int[]> undo = new();
     readonly CancellationTokenSource cts = new();
     int sinceSave;
 
@@ -41,7 +41,7 @@ public partial class Home : IDisposable
             {
                 var g = JsonSerializer.Deserialize(json, AppJson.Default.GameState);
                 if (g is { Completed: false } && g.Values.Length == 81 && g.Givens.Length == 81
-                    && g.Solution.Length == 81 && g.Notes.Length == 81)
+                    && g.Solution.Length == 81)
                     saved = g;
             }
         }
@@ -81,10 +81,9 @@ public partial class Home : IDisposable
             Givens = puzzle,
             Solution = solution,
             Values = (int[])puzzle.Clone(),
-            Notes = new int[81],
         };
         saved = null;
-        selected = -1; notes = false; message = ""; undo.Clear(); flagged.Clear();
+        selected = -1; message = ""; undo.Clear(); flagged.Clear();
         menuOpen = false; busy = false;
         RecomputeConflicts();
         await Save();
@@ -119,13 +118,12 @@ public partial class Home : IDisposable
     // ---------- Input ----------
 
     void Select(int i) { selected = i; message = ""; }
-    void ToggleNotes() => notes = !notes;
 
     bool CanEdit => game is { Completed: false } && selected >= 0 && game.Givens[selected] == 0;
 
     void PushUndo() 
     {
-        undo.Add(((int[])game!.Values.Clone(), (int[])game.Notes.Clone()));
+        undo.Add((int[])game!.Values.Clone());
         if (undo.Count > 300) undo.RemoveAt(0);
     }
 
@@ -135,15 +133,6 @@ public partial class Home : IDisposable
         if (selected < 0) { message = "Tap a square first"; return; }
         if (!CanEdit) { message = "That number is fixed"; return; }
 
-        if (notes)
-        {
-            if (game.Values[selected] != 0) { message = "Erase the number to add notes"; return; }
-            PushUndo();
-            game.Notes[selected] ^= 1 << n;
-            await Changed();
-            return;
-        }
-
         PushUndo();
         if (game.Values[selected] == n)
         {
@@ -152,9 +141,7 @@ public partial class Home : IDisposable
         else
         {
             game.Values[selected] = n;
-            game.Notes[selected] = 0;
             if (n != game.Solution[selected]) game.Mistakes++;
-            foreach (int p in SudokuEngine.Peers[selected]) game.Notes[p] &= ~(1 << n);
         }
         await Changed();
     }
@@ -163,19 +150,17 @@ public partial class Home : IDisposable
     {
         if (game is null) return;
         if (!CanEdit) { message = selected < 0 ? "Tap a square first" : "That number is fixed"; return; }
-        if (game.Values[selected] == 0 && game.Notes[selected] == 0) return;
+        if (game.Values[selected] == 0) return;
         PushUndo();
         game.Values[selected] = 0;
-        game.Notes[selected] = 0;
         await Changed();
     }
 
     async Task Undo()
     {
         if (game is null || undo.Count == 0) return;
-        var (v, n) = undo[^1];
+        game.Values = undo[^1];
         undo.RemoveAt(undo.Count - 1);
-        game.Values = v; game.Notes = n;
         await Changed();
     }
 
@@ -194,8 +179,6 @@ public partial class Home : IDisposable
         PushUndo();
         selected = target;
         game.Values[target] = game.Solution[target];
-        game.Notes[target] = 0;
-        foreach (int p in SudokuEngine.Peers[target]) game.Notes[p] &= ~(1 << game.Values[target]);
         game.Hints++;
         await Changed();
         message = "Hint: the correct number was filled in";
@@ -250,7 +233,6 @@ public partial class Home : IDisposable
             case "ArrowDown": Move(9); break;
             case "ArrowLeft": Move(-1); break;
             case "ArrowRight": Move(1); break;
-            case "n" or "N": notes = !notes; break;
             case "z" or "Z" when e.CtrlKey || e.MetaKey: await Undo(); break;
         }
     }
@@ -289,7 +271,6 @@ public partial class Home : IDisposable
         var g = game!;
         string s = $"Row {i / 9 + 1}, column {i % 9 + 1}, ";
         if (g.Values[i] != 0) s += g.Givens[i] != 0 ? $"{g.Values[i]}, given" : $"{g.Values[i]}";
-        else if (g.Notes[i] != 0) s += "empty, notes " + string.Join(' ', Enumerable.Range(1, 9).Where(n => (g.Notes[i] >> n & 1) != 0));
         else s += "empty";
         if (conflicts[i]) s += ", conflicts with another number";
         if (flagged.Contains(i)) s += ", wrong";
