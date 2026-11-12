@@ -1,0 +1,123 @@
+@page "/"
+@using VisibleSudoku.Game
+
+<PageTitle>VisibleSudoku</PageTitle>
+
+<div class="app" tabindex="0" @onkeydown="OnKey">
+    <header class="topbar">
+        <div class="title">VisibleSudoku</div>
+        <button class="btn small" @onclick="ToggleTheme" aria-label="Switch between light and dark display">
+            @(dark ? "☀ Light" : "☾ Dark")
+        </button>
+    </header>
+
+    @if (game is not null)
+    {
+        <div class="status">
+            <span>@game.Difficulty</span>
+            <span aria-label="Time">@TimeText</span>
+            <span>Mistakes: @game.Mistakes</span>
+        </div>
+
+        <div class="board-wrap">
+            <div class="board" role="grid" aria-label="Sudoku board">
+                @for (int i = 0; i < 81; i++)
+                {
+                    int idx = i;
+                    <button type="button" class="@CellClass(idx)" aria-label="@CellLabel(idx)" @onclick="() => Select(idx)">
+                        @if (game.Values[idx] != 0)
+                        {
+                            @game.Values[idx]
+                        }
+                        else if (game.Notes[idx] != 0)
+                        {
+                            <div class="notes">
+                                @for (int n = 1; n <= 9; n++)
+                                {
+                                    <span>@((game.Notes[idx] >> n & 1) != 0 ? n.ToString() : "")</span>
+                                }
+                            </div>
+                        }
+                    </button>
+                }
+            </div>
+        </div>
+
+        <div class="msg" role="status" aria-live="polite">@message</div>
+
+        <div class="numpad">
+            @for (int n = 1; n <= 9; n++)
+            {
+                int d = n;
+                int left = Remaining(d);
+                <button type="button" class="btn num" disabled="@(left <= 0)" @onclick="() => Input(d)"
+                        aria-label="@($"Number {d}, {Math.Max(left, 0)} left")">
+                    @d
+                    <span class="left">@Math.Max(left, 0)</span>
+                </button>
+            }
+            <button type="button" class="btn num erase" @onclick="Erase" aria-label="Erase">Erase</button>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn act" @onclick="Undo" disabled="@(undo.Count == 0)">
+                <span class="ico">↶</span>Undo
+            </button>
+            <button type="button" class="btn act @(notes ? "on" : "")" @onclick="ToggleNotes" aria-pressed="@(notes ? "true" : "false")">
+                <span class="ico">✎</span>Notes @(notes ? "ON" : "off")
+            </button>
+            <button type="button" class="btn act" @onclick="Hint">
+                <span class="ico">?</span>Hint
+            </button>
+            <button type="button" class="btn act" @onclick="Check">
+                <span class="ico">✓</span>Check
+            </button>
+            <button type="button" class="btn act" @onclick="OpenMenu">
+                <span class="ico">+</span>New
+            </button>
+        </div>
+    }
+
+    @if (busy)
+    {
+        <div class="overlay"><h1>Making a puzzle…</h1></div>
+    }
+    else if (game is { Completed: true })
+    {
+        <div class="overlay">
+            <h1>Well done!</h1>
+            <p>@game.Difficulty puzzle solved in @TimeText</p>
+            <p>Mistakes: @game.Mistakes &nbsp; Hints: @game.Hints</p>
+            <div class="hdr">Play again</div>
+            @DifficultyButtons
+        </div>
+    }
+    else if (menuOpen || game is null)
+    {
+        <div class="overlay">
+            <h1>VisibleSudoku</h1>
+            @if (saved is not null)
+            {
+                <button type="button" class="btn menu-btn cont" @onclick="Continue">
+                    Continue game
+                    <small>@saved.Difficulty · @FormatTime(saved.Seconds)</small>
+                </button>
+            }
+            <div class="hdr">New game</div>
+            @DifficultyButtons
+            @if (game is not null)
+            {
+                <button type="button" class="btn menu-btn" @onclick="CloseMenu">Back to puzzle</button>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    RenderFragment DifficultyButtons => @<text>
+        <button type="button" class="btn menu-btn" @onclick="() => StartNew(Difficulty.Easy)">Easy<small>Lots of numbers given</small></button>
+        <button type="button" class="btn menu-btn" @onclick="() => StartNew(Difficulty.Medium)">Medium<small>A comfortable challenge</small></button>
+        <button type="button" class="btn menu-btn" @onclick="() => StartNew(Difficulty.Hard)">Hard<small>Fewer numbers given</small></button>
+        <button type="button" class="btn menu-btn" @onclick="() => StartNew(Difficulty.Expert)">Expert<small>Very few numbers, needs deeper thinking</small></button>
+    </text>;
+}
