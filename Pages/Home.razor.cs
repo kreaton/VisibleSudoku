@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -22,6 +23,9 @@ public partial class Home : IDisposable
     readonly List<int[]> undo = new();
     readonly CancellationTokenSource cts = new();
     int sinceSave;
+
+    static readonly string AppVersion =
+        typeof(Home).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "";
 
     string TimeText => FormatTime(game?.Seconds ?? 0);
 
