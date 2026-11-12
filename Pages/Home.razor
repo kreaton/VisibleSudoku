@@ -6,9 +6,6 @@
 <div class="app" tabindex="0" @onkeydown="OnKey">
     <header class="topbar">
         <div class="title">VisibleSudoku</div>
-        <button class="btn small" @onclick="ToggleTheme" aria-label="Switch between light and dark display">
-            @(dark ? "☀ Light" : "☾ Dark")
-        </button>
     </header>
 
     @if (game is not null)
@@ -55,6 +52,17 @@
             </button>
             <button type="button" class="btn act new" @onclick="OpenMenu" aria-label="New game" title="New game">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg>
+            </button>
+            <button type="button" class="btn act theme" @onclick="ToggleTheme"
+                    aria-label="@(dark ? "Switch to light display" : "Switch to dark display")" title="@(dark ? "Light display" : "Dark display")">
+                @if (dark)
+                {
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+                }
+                else
+                {
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+                }
             </button>
             <button type="button" class="btn act hint" @onclick="Hint" aria-label="Hint" title="Hint">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>

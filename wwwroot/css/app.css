@@ -176,7 +176,6 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
 }
 .btn.on { background: var(--btn-on-bg); color: var(--btn-on-fg); }
 .btn:disabled { opacity: .3; cursor: default; }
-.btn.small { font-size: 18px; padding: 8px 14px; min-height: 44px; }
 
 .numpad {
     width: 100%;
@@ -202,6 +201,7 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
 .btn.erase { background: #c40000; color: #fff; }
 .btn.undo { background: #1b7a2b; color: #fff; }
 .btn.new { background: #00727a; color: #fff; }
+.btn.theme { background: #4a4a4a; color: #fff; }
 .act.hint { background: #a84300; color: #fff; }
 .act.check { background: #6a1b9a; color: #fff; }
 
@@ -209,7 +209,7 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
     width: 100%;
     flex: 0 0 auto;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 6px;
 }
 .act {
