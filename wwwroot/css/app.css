@@ -200,16 +200,29 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
     gap: 6px;
 }
 .num {
-    position: relative;
-    height: clamp(48px, 7.4dvh, 68px);
-    font-size: clamp(30px, 9vw, 44px);
+    height: clamp(40px, 6dvh, 56px);
+    font-size: clamp(26px, 7.5vw, 38px);
     line-height: 1;
+    padding: 0;
 }
-.num .left {
-    position: absolute; right: 6px; bottom: 3px;
-    font-size: 14px; font-weight: 800;
+
+/* Icon buttons: white symbols on strong colours (all >= 4.5:1), same in both themes */
+.btn svg {
+    width: clamp(26px, 7vw, 34px); height: clamp(26px, 7vw, 34px);
+    fill: none; stroke: currentColor; stroke-width: 2.6;
+    stroke-linecap: round; stroke-linejoin: round;
+    display: block; margin: auto;
 }
-.num.erase { font-size: clamp(18px, 5vw, 24px); }
+.btn.erase { background: #c40000; color: #fff; }
+.btn.undo { background: #1b7a2b; color: #fff; }
+.btn.new { background: #00727a; color: #fff; }
+.act.notes-btn { background: #0b4fc4; color: #fff; }
+.act.hint { background: #a84300; color: #fff; }
+.act.check { background: #6a1b9a; color: #fff; }
+.act.notes-btn.on {       /* "on" shown by colour AND a thick inner ring */
+    background: var(--btn-on-bg); color: var(--btn-on-fg);
+    box-shadow: inset 0 0 0 4px var(--btn-on-fg);
+}
 
 .actions {
     width: 100%;
@@ -219,12 +232,9 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
     gap: 6px;
 }
 .act {
-    height: clamp(52px, 7.6dvh, 66px);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 1px;
-    font-size: 16px;
+    height: clamp(42px, 6dvh, 54px);
+    padding: 0;
 }
-.act .ico { font-size: 22px; line-height: 1; }
 
 /* ---------- Menu / win overlay ---------- */
 .overlay {

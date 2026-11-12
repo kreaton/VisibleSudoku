@@ -51,29 +51,29 @@
                 int d = n;
                 int left = Remaining(d);
                 <button type="button" class="btn num" disabled="@(left <= 0)" @onclick="() => Input(d)"
-                        aria-label="@($"Number {d}, {Math.Max(left, 0)} left")">
-                    @d
-                    <span class="left">@Math.Max(left, 0)</span>
-                </button>
+                        aria-label="@($"Number {d}, {Math.Max(left, 0)} left")">@d</button>
             }
-            <button type="button" class="btn num erase" @onclick="Erase" aria-label="Erase">Erase</button>
+            <button type="button" class="btn num undo" @onclick="Undo" disabled="@(undo.Count == 0)" aria-label="Undo" title="Undo">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-4"/></svg>
+            </button>
         </div>
 
         <div class="actions">
-            <button type="button" class="btn act" @onclick="Undo" disabled="@(undo.Count == 0)">
-                <span class="ico">↶</span>Undo
+            <button type="button" class="btn act erase" @onclick="Erase" aria-label="Erase" title="Erase">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 5H9l-7 7 7 7h12z"/><path d="M12 9l6 6M18 9l-6 6"/></svg>
             </button>
-            <button type="button" class="btn act @(notes ? "on" : "")" @onclick="ToggleNotes" aria-pressed="@(notes ? "true" : "false")">
-                <span class="ico">✎</span>Notes @(notes ? "ON" : "off")
+            <button type="button" class="btn act new" @onclick="OpenMenu" aria-label="New game" title="New game">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg>
             </button>
-            <button type="button" class="btn act" @onclick="Hint">
-                <span class="ico">?</span>Hint
+            <button type="button" class="btn act notes-btn @(notes ? "on" : "")" @onclick="ToggleNotes" aria-pressed="@(notes ? "true" : "false")"
+                    aria-label="@(notes ? "Notes on" : "Notes off")" title="Notes">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3l4 4L8 20H4v-4z"/><path d="M14 6l4 4"/></svg>
             </button>
-            <button type="button" class="btn act" @onclick="Check">
-                <span class="ico">✓</span>Check
+            <button type="button" class="btn act hint" @onclick="Hint" aria-label="Hint" title="Hint">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>
             </button>
-            <button type="button" class="btn act" @onclick="OpenMenu">
-                <span class="ico">+</span>New
+            <button type="button" class="btn act check" @onclick="Check" aria-label="Check" title="Check">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>
             </button>
         </div>
     }
