@@ -88,7 +88,8 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
     gap: 8px;
     flex: 0 0 auto;
 }
-.title { font-size: 24px; font-weight: 900; letter-spacing: .2px; }
+.title { font-size: 24px; font-weight: 900; letter-spacing: .2px; display: flex; align-items: center; gap: .3em; }
+.title-icon { width: 1em; height: 1em; border-radius: .18em; flex: 0 0 auto; }
 
 .status {
     width: 100%;
@@ -242,15 +243,21 @@ button:focus-visible, .app:focus-visible { outline: 5px solid #ff00ff; outline-o
 /* Start page: icon on top, credits pinned to the bottom, menu centred between them */
 .overlay.start { justify-content: flex-start; gap: 7px; }
 .overlay > * { flex-shrink: 0; }   /* scroll rather than squash buttons on short screens */
+/* The icon sits centred in the free space between the top edge and the title;
+   the spacer below the menu takes an equal share so the menu stays centred. */
+.start-top {
+    flex: 1 0 auto; display: flex; align-items: center; justify-content: center;
+}
+.start-spacer { flex: 1 0 0; }
 .start-icon {
-    margin-top: auto;
+    /* Nudge up by half of (top padding - 7px gap) so it sits exactly midway between screen edge and title. */
+    transform: translateY(calc((max(env(safe-area-inset-top), 16px) - 7px) / -2));
     width: 72px; height: 72px;
     border-radius: 16px;
     border: 3px solid var(--line);
     flex: 0 0 auto;
 }
 .credits {
-    margin-top: auto;
     padding-top: 10px;
     text-align: center;
     font-size: 14px;
