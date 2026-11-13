@@ -73,6 +73,17 @@
         </div>
     }
 
+    @if (checkResult is not null && !busy && !menuOpen && game is { Completed: false })
+    {
+        <div class="dialog-backdrop">
+            <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="check-title" aria-describedby="check-text">
+                <h2 id="check-title">Check</h2>
+                <p id="check-text">@checkResult</p>
+                <button type="button" class="btn dialog-ok" @ref="okButton" @onclick="CloseCheck">OK</button>
+            </div>
+        </div>
+    }
+
     @if (busy)
     {
         <div class="overlay"><h1>Making a puzzle…</h1></div>

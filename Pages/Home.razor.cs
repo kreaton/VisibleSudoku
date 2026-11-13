@@ -17,6 +17,9 @@ public partial class Home : IDisposable
     int selected = -1;
     bool dark, menuOpen = true, busy;
     string message = "";
+    string? checkResult;
+    bool focusDialog;
+    ElementReference okButton;
     readonly HashSet<int> flagged = new();
     readonly bool[] conflicts = new bool[81];
     readonly List<int[]> undo = new();
@@ -190,9 +193,22 @@ public partial class Home : IDisposable
         flagged.Clear();
         for (int i = 0; i < 81; i++)
             if (game.Values[i] != 0 && game.Values[i] != game.Solution[i]) flagged.Add(i);
-        message = flagged.Count == 0 ? "All numbers so far are correct" :
-                  flagged.Count == 1 ? "1 number is wrong (marked)" : $"{flagged.Count} numbers are wrong (marked)";
+        message = "";
+        checkResult = flagged.Count == 0 ? "All numbers so far are correct" :
+                      flagged.Count == 1 ? "1 number is wrong (marked in red)" : $"{flagged.Count} numbers are wrong (marked in red)";
+        focusDialog = true;
         await Task.CompletedTask;
+    }
+
+    void CloseCheck() => checkResult = null;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (focusDialog && checkResult is not null)
+        {
+            focusDialog = false;
+            try { await okButton.FocusAsync(); } catch { }
+        }
     }
 
     async Task Changed()
@@ -224,6 +240,11 @@ public partial class Home : IDisposable
 
     async Task OnKey(KeyboardEventArgs e)
     {
+        if (checkResult is not null)
+        {
+            if (e.Key is "Escape" or "Enter" or " ") CloseCheck();
+            return;
+        }
         if (game is null || menuOpen || busy || game.Completed) return;
         switch (e.Key)
         {
