@@ -1,6 +1,9 @@
 # VisibleSudoku
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/kreaton/VisibleSudoku?style=flat&logo=github&color=yellow)](https://github.com/kreaton/VisibleSudoku/stargazers)
+
+⭐ If VisibleSudoku earns a place on your machine, [star it on GitHub](https://github.com/kreaton/VisibleSudoku) — it's free, made by one developer, and stars are how other people find it.
 
 <img src="wwwroot/icon-192.png" alt="VisibleSudoku icon" width="96" align="right" />
 
